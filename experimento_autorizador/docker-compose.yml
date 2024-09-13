@@ -1,0 +1,13 @@
+version: "3"
+services:
+  autorizador:
+    build: ./autorizador
+    ports:
+      - "5000:5000"
+
+  api_gateway:
+    build: ./api_gateway
+    ports:
+      - "5001:5001"
+    depends_on:
+      - autorizador
