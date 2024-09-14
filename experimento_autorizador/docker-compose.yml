@@ -1,0 +1,44 @@
+version: "3"
+services:
+  autorizador:
+    build: ./autorizador
+    environment:
+      - SECRET_KEY=${f8a5a5d3b80e57c47aebc8a0b7cb4239f35bd42a2039a1e9248d474bcd1183de}
+    ports:
+      - "5000:5000"
+    networks:
+      - external_network
+
+  api_gateway:
+    build: ./api_gateway
+    ports:
+      - "5001:5001"
+    depends_on:
+      - autorizador
+      - cliente
+    networks:
+      - external_network
+      - internal_network
+
+  cliente:
+    build: ./cliente
+    environment:
+      - SECRET_KEY=${f8a5a5d3b80e57c47aebc8a0b7cb4239f35bd42a2039a1e9248d474bcd1183de}
+    expose:
+      - "5002"
+    networks:
+      - internal_network
+
+  consumidor:
+    build: ./consumidor
+    environment:
+      - SECRET_KEY=${f8a5a5d3b80e57c47aebc8a0b7cb4239f35bd42a2039a1e9248d474bcd1183de}
+    expose:
+      - "5003"
+    networks:
+      - internal_network
+
+networks:
+  external_network:
+  internal_network:
+    internal: true
